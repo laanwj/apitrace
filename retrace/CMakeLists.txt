@@ -14,6 +14,8 @@ include_directories (
 if (ENABLE_EGL)
     if (ENABLE_WAFFLE)
         link_directories (${Waffle_LIBRARY_DIRS})
+    else ()
+        link_directories (${DRM_LIBRARY_DIRS} ${GBM_LIBRARY_DIRS})
     endif ()
 endif ()
 
@@ -153,22 +155,23 @@ if (WIN32 OR APPLE OR X11_FOUND)
     install_pdb (glretrace DESTINATION bin)
 endif ()
 
-if (ENABLE_EGL AND X11_FOUND AND NOT WIN32 AND NOT APPLE AND NOT ENABLE_WAFFLE)
+if (ENABLE_EGL AND NOT WIN32 AND NOT APPLE AND NOT ENABLE_WAFFLE)
     add_executable (eglretrace
-        glws_xlib.cpp
-        glws_egl_xlib.cpp
+        glws_egl_kms.cpp
     )
 
     add_dependencies (eglretrace glproc)
+    include_directories (${DRM_INCLUDE_DIRS} ${GBM_INCLUDE_DIRS})
 
     target_link_libraries (eglretrace
         retrace_common
         glretrace_common
         glhelpers
         glproc_egl
-        ${X11_X11_LIB}
         ${CMAKE_THREAD_LIBS_INIT}
         ${CMAKE_DL_LIBS}
+        ${DRM_LIBRARIES}
+        ${GBM_LIBRARIES}
     )
     install (TARGETS eglretrace RUNTIME DESTINATION bin) 
 endif ()

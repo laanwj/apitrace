@@ -172,6 +172,11 @@ if (ENABLE_EGL AND ENABLE_WAFFLE)
     find_package (Waffle REQUIRED)
 endif ()
 
+find_package(PkgConfig)
+if (ENABLE_EGL AND NOT ENABLE_WAFFLE)
+    pkg_check_modules(DRM REQUIRED libdrm)
+    pkg_check_modules(GBM REQUIRED gbm)
+endif ()
 
 ##############################################################################
 # Set global build options
