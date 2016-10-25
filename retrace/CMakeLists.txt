@@ -11,6 +11,11 @@ include_directories (
     ${CMAKE_SOURCE_DIR}/lib/ubjson
     ${CMAKE_SOURCE_DIR}/thirdparty/dxerr
 )
+if (ENABLE_EGL)
+    if (ENABLE_WAFFLE)
+        link_directories (${Waffle_LIBRARY_DIRS})
+    endif ()
+endif ()
 
 add_definitions (-DRETRACE)
 
@@ -183,7 +188,6 @@ if (ENABLE_EGL)
             glhelpers
             glproc_egl
             ${Waffle_LIBRARIES}
-            ${X11_X11_LIB}
             ${CMAKE_THREAD_LIBS_INIT}
             ${CMAKE_DL_LIBS}
         )
